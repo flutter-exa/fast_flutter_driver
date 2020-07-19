@@ -25,8 +25,7 @@ String? get _nativeResolutionFile {
         ? 'linux/window_configuration.cc'
         : 'linux/main.cc';
   }
-  assert(false);
-  return null;
+  throw AssertionError('Only linux resolution should be overridden with file');
 }
 
 bool get isValidRootDirectory =>
