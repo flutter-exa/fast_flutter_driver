@@ -13,6 +13,7 @@ import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
 import '../bin/main.dart' as main_file;
+import 'mockito_nnbd.dart' as nnbd_mockito;
 
 void main() {
   late VersionChecker versionChecker;
@@ -63,7 +64,8 @@ void main() {
     test('flavor', () async {
       linuxOverride = false;
       when(versionChecker.checkForUpdates()).thenAnswer((_) async => null);
-      when(testFileProvider.testFile(any)).thenAnswer((_) async => 'any');
+      when(testFileProvider.testFile(nnbd_mockito.any))
+          .thenAnswer((_) async => 'any');
       const flavor = 'chocolate';
 
       await main_file.run(
@@ -75,7 +77,10 @@ void main() {
       );
 
       final ExecutorParameters parameters = verify(
-        testExecutor.test(any, parameters: captureAnyNamed('parameters')),
+        testExecutor.test(
+          nnbd_mockito.any,
+          parameters: nnbd_mockito.captureAnyNamed('parameters'),
+        ),
       ).captured.single;
       expect(parameters.flavor, flavor);
     });
@@ -99,7 +104,7 @@ void main() {
         },
         getCurrentDirectory: () {
           final mockDir = _MockDirectory();
-          when(mockDir.listSync(recursive: anyNamed('recursive')))
+          when(mockDir.listSync(recursive: nnbd_mockito.anyNamed('recursive')))
               .thenReturn([]);
           return mockDir;
         },
@@ -176,13 +181,14 @@ void main() {
 
         when(mockDir.path).thenReturn(name);
         when(mockDir.existsSync()).thenReturn(true);
-        when(mockDir.listSync(recursive: anyNamed('recursive'))).thenReturn([]);
+        when(mockDir.listSync(recursive: nnbd_mockito.anyNamed('recursive')))
+            .thenReturn([]);
 
         return mockDir;
       },
       getCurrentDirectory: () {
         final mockDir = _MockDirectory();
-        when(mockDir.listSync(recursive: anyNamed('recursive')))
+        when(mockDir.listSync(recursive: nnbd_mockito.anyNamed('recursive')))
             .thenReturn([File('pubspec.yaml')]);
         return mockDir;
       },
