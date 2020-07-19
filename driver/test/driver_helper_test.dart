@@ -6,13 +6,13 @@ import 'package:test/test.dart';
 
 void main() {
   group('TestFlutterEx', () {
-    <TestPlatform, TargetPlatform>{
+    <TestPlatform?, TargetPlatform>{
       TestPlatform.android: TargetPlatform.android,
       TestPlatform.iOS: TargetPlatform.iOS,
       null: TargetPlatform.fuchsia,
     }.forEach((key, value) {
       test('when $key', () {
-        expect(key.targetPlatform, value);
+        expect(key?.targetPlatform, value);
       });
     });
   });
@@ -28,9 +28,7 @@ void main() {
       final config = _MockConfiguration();
       when(config.resolution).thenReturn(Resolution.fromSize('1x1'));
 
-      final tested = await configureTest(config);
-
-      expect(tested, isNull);
+      await configureTest(config);
     });
   });
 }
